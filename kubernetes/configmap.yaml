@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wanderlust-config
+  namespace: wanderlust
+
+data:
+  MONGODB_URI: mongodb://mongo-service/wanderlust
+  REDIS_URL: redis://redis-service:6379
+  PORT: "8080"
+  FRONTEND_URL: http://16.112.30.190:31000
+  NODE_ENV: Development
+  VITE_API_PATH: http://16.112.30.190:31100

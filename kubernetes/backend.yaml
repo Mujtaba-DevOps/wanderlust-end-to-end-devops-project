@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: backend-deployment
+  namespace: wanderlust
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      containers:
+
+      - name: backend
+
+        image: mujtabas/wanderlust-backend:v1
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 8080
+
+        envFrom:
+        - configMapRef:
+            name: wanderlust-config
+
+        - secretRef:
+            name: wanderlust-secret
+
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: backend-service
+  namespace: wanderlust
+
+spec:
+
+  selector:
+    app: backend
+
+  type: NodePort
+
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 31100
